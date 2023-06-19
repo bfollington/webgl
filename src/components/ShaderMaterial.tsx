@@ -273,25 +273,26 @@ declare global {
   }
 }
 
-export function ShaderMaterialScene() {
+export const ShaderMaterialScene = React.forwardRef<THREE.Mesh>((props, ref) => {
   const size = useThree((state) => state.size)
-  const ref = React.useRef<ShaderMaterial>(null)
+  const shaderRef = React.useRef<ShaderMaterial>(null)
   useFrame((state) => {
-    if (!ref.current) return
+    if (!shaderRef.current) return
 
-    if (ref.current.uniforms) {
-      ref.current.uniforms.iTime.value = state.clock.elapsedTime
+    if (shaderRef.current.uniforms) {
+      shaderRef.current.uniforms.iTime.value = state.clock.elapsedTime
     }
   })
 
   return (
-    <Sphere>
+    <Sphere ref={ref}>
       <subconsciousMaterial
-        ref={ref}
+        ref={shaderRef}
+        key={SubconsciousMaterial.key}
         iMouse={[0, 0]}
         iTime={0}
         iResolution={[size.width / 2, size.height / 2]}
       />
     </Sphere>
   )
-}
+})

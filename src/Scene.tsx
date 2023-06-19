@@ -9,6 +9,14 @@ import { Plane } from './components/Plane'
 import { Sphere } from './components/Sphere'
 import { ScreenQuadScene } from './components/FullscreenShader'
 import { ShaderMaterialScene } from './components/ShaderMaterial'
+import {
+  Bloom,
+  DepthOfField,
+  Scanline,
+  EffectComposer,
+  Noise,
+  Vignette,
+} from '@react-three/postprocessing'
 
 function Scene() {
   const { performance } = useControls('Monitoring', {
@@ -41,11 +49,16 @@ function Scene() {
       />
       <ambientLight intensity={0.2} />
 
-      <Cube ref={cubeRef} />
+      {/* <Cube ref={cubeRef} /> */}
       <Sphere />
       <Plane />
 
-      <ShaderMaterialScene />
+      <ShaderMaterialScene ref={cubeRef} />
+
+      <EffectComposer>
+        <Scanline />
+        <Noise opacity={0.02} />
+      </EffectComposer>
     </>
   )
 }
