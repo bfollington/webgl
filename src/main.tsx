@@ -5,6 +5,29 @@ import ReactDOM from 'react-dom/client'
 import { ACESFilmicToneMapping, sRGBEncoding } from 'three'
 import { Scene } from './Scene'
 import './styles/main.css'
+import { WebMidi } from 'webmidi'
+
+WebMidi.enable()
+  .then(onEnabled)
+  .catch((err) => alert(err))
+
+function onEnabled() {
+  if (WebMidi.inputs.length < 1) {
+    console.log('No device detected.')
+    return
+  } else {
+    WebMidi.inputs.forEach((device, index) => {
+      console.log(`${index}: ${device.name} <br>`)
+    })
+  }
+
+  const mySynth = WebMidi.inputs[0]
+  // const mySynth = WebMidi.getInputByName("TYPE NAME HERE!")
+
+  mySynth.channels[1].addListener('noteon', (e) => {
+    console.log(`${e.note.name}`)
+  })
+}
 
 function Main() {
   return (

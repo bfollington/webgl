@@ -17,6 +17,9 @@ dependencies:
   '@types/three':
     specifier: ^0.152.1
     version: 0.152.1
+  '@types/webmidi':
+    specifier: ^2.0.7
+    version: 2.0.7
   leva:
     specifier: ^0.9.35
     version: 0.9.35(@types/react-dom@18.2.5)(@types/react@18.2.12)(react-dom@18.2.0)(react@18.2.0)
@@ -32,6 +35,9 @@ dependencies:
   three:
     specifier: ^0.153.0
     version: 0.153.0
+  webmidi:
+    specifier: ^3.1.6
+    version: 3.1.6
 
 devDependencies:
   '@types/react':
@@ -1140,6 +1146,10 @@ packages:
       lil-gui: 0.17.0
     dev: false
 
+  /@types/webmidi@2.0.7:
+    resolution: {integrity: sha512-BMVefNAum/swSmQJdTbRWBuDPeWT7fHAZEzmtY6eBl1ObvkWVzh39VvAFC8v9n7Y5XoOpWmeYzyUUVfmpq3ggQ==}
+    dev: false
+
   /@types/webxr@0.5.2:
     resolution: {integrity: sha512-szL74BnIcok9m7QwYtVmQ+EdIKwbjPANudfuvDrAF8Cljg9MKUlIoc1w5tjj9PMpeSH3U1Xnx//czQybJ0EfSw==}
     dev: false
@@ -1298,6 +1308,12 @@ packages:
       webgl-constants: 1.1.1
     dev: false
 
+  /djipevents@2.0.7:
+    resolution: {integrity: sha512-KNFYaU85imxOCKOUsIR70Iz9E19r96/X7LSH+u0tSoZdpWcBdzoqtTsU+wuLhc6GMpSFob+KInkZAbfKi01Bjg==}
+    dependencies:
+      '@babel/runtime': 7.22.5
+    dev: false
+
   /draco3d@1.5.6:
     resolution: {integrity: sha512-+3NaRjWktb5r61ZFoDejlykPEFKT5N/LkbXsaddlw6xNSXBanUYpFc2AXXpbJDilPHazcSreU/DpQIaxfX0NfQ==}
     dev: false
@@ -1446,6 +1462,12 @@ packages:
       react: 18.2.0
     dev: false
 
+  /jazz-midi@1.7.9:
+    resolution: {integrity: sha512-c8c4BBgwxdsIr1iVm53nadCrtH7BUlnX3V95ciK/gbvXN/ndE5+POskBalXgqlc/r9p2XUbdLTrgrC6fou5p9w==}
+    engines: {node: '>=10.0.0'}
+    dev: false
+    optional: true
+
   /js-tokens@4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
 
@@ -1460,6 +1482,15 @@ packages:
     engines: {node: '>=6'}
     hasBin: true
     dev: true
+
+  /jzz@1.6.4:
+    resolution: {integrity: sha512-vUEyCChbCKL3g5YE4KJU1XbmGxX/29L/Ba3BpVpqwF2vuW/H3izbHNc73rl3Htve20OoHt77rWw2Nh4ckYorGw==}
+    requiresBuild: true
+    dependencies:
+      '@types/webmidi': 2.0.7
+      jazz-midi: 1.7.9
+    dev: false
+    optional: true
 
   /ktx-parse@0.4.5:
     resolution: {integrity: sha512-MK3FOody4TXbFf8Yqv7EBbySw7aPvEcPX++Ipt6Sox+/YMFvR5xaTyhfNSk1AEmMy+RYIw81ctN4IMxCB8OAlg==}
@@ -1990,6 +2021,15 @@ packages:
 
   /webgl-sdf-generator@1.1.1:
     resolution: {integrity: sha512-9Z0JcMTFxeE+b2x1LJTdnaT8rT8aEp7MVxkNwoycNmJWwPdzoXzMh0BjJSh/AEFP+KPYZUli814h8bJZFIZ2jA==}
+    dev: false
+
+  /webmidi@3.1.6:
+    resolution: {integrity: sha512-IeC7dsm9bupL7Z6PZxVGAbcrguclJ0VAxn3+7UjoZazZWKEwwnq3/ToDbHQdWzOOLwat4fYjp978X1Rd3SQ8Qg==}
+    engines: {node: '>=8.5'}
+    dependencies:
+      djipevents: 2.0.7
+    optionalDependencies:
+      jzz: 1.6.4
     dev: false
 
   /yallist@3.1.1:
