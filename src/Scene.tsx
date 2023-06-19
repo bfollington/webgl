@@ -7,6 +7,8 @@ import { BoxGeometry, Mesh, MeshBasicMaterial } from 'three'
 import { Cube } from './components/Cube'
 import { Plane } from './components/Plane'
 import { Sphere } from './components/Sphere'
+import { ScreenQuadScene } from './components/FullscreenShader'
+import { ShaderMaterialScene } from './components/ShaderMaterial'
 
 function Scene() {
   const { performance } = useControls('Monitoring', {
@@ -42,6 +44,8 @@ function Scene() {
       <Cube ref={cubeRef} />
       <Sphere />
       <Plane />
+
+      <ShaderMaterialScene />
     </>
   )
 }
