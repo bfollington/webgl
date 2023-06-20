@@ -1,13 +1,9 @@
 lockfileVersion: '6.0'
 
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
-
 dependencies:
   '@react-three/drei':
-    specifier: ^9.76.1
-    version: 9.76.1(@react-three/fiber@8.13.3)(@types/three@0.152.1)(react-dom@18.2.0)(react@18.2.0)(three@0.153.0)
+    specifier: ^9.77.0
+    version: 9.77.0(@react-three/fiber@8.13.3)(@types/three@0.152.1)(react-dom@18.2.0)(react@18.2.0)(three@0.153.0)
   '@react-three/fiber':
     specifier: ^8.13.3
     version: 8.13.3(react-dom@18.2.0)(react@18.2.0)(three@0.153.0)
@@ -997,8 +993,8 @@ packages:
     resolution: {integrity: sha512-POu8Mk0hIU3lRXB3bGIGe4VHIwwDsQyoD1F394OK7STTiX9w4dG3cTLljjYswkQN+hDSHRrj4O36kuVa7KPU8Q==}
     dev: false
 
-  /@react-three/drei@9.76.1(@react-three/fiber@8.13.3)(@types/three@0.152.1)(react-dom@18.2.0)(react@18.2.0)(three@0.153.0):
-    resolution: {integrity: sha512-Dqjq7IXO+vX617wzhaRHqtBEtUHhBRtvqnUiTdCvZqszyKjCBtM9fK3U1WsgjDI8flaJL4ko9KvA6tsyJyKttg==}
+  /@react-three/drei@9.77.0(@react-three/fiber@8.13.3)(@types/three@0.152.1)(react-dom@18.2.0)(react@18.2.0)(three@0.153.0):
+    resolution: {integrity: sha512-hAPXkPbmvBB1oKcGgkX+fRfAT9j7+Y2/78pa0xL8jgmkjVbLsrKYh7SOcPuVZ1kUmFFsg75pTZA85KTWqCIzew==}
     peerDependencies:
       '@react-three/fiber': '>=8.0'
       react: '>=18.0'
@@ -1708,7 +1704,7 @@ packages:
         optional: true
     dependencies:
       '@radix-ui/react-icons': 1.3.0(react@18.2.0)
-      '@react-three/drei': 9.76.1(@react-three/fiber@8.13.3)(@types/three@0.152.1)(react-dom@18.2.0)(react@18.2.0)(three@0.153.0)
+      '@react-three/drei': 9.77.0(@react-three/fiber@8.13.3)(@types/three@0.152.1)(react-dom@18.2.0)(react@18.2.0)(three@0.153.0)
       '@react-three/fiber': 8.13.3(react-dom@18.2.0)(react@18.2.0)(three@0.153.0)
       '@stitches/react': 1.2.8(react@18.2.0)
       '@utsubo/events': 0.1.7(react@18.2.0)
@@ -2115,3 +2111,7 @@ packages:
       react: 18.2.0
       use-sync-external-store: 1.2.0(react@18.2.0)
     dev: false
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
