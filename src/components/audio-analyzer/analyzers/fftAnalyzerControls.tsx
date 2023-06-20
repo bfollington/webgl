@@ -1,6 +1,6 @@
 import { folder, useControls } from 'leva'
 import { useEffect, useRef } from 'react'
-import { useAppStateActions, useEnergyInfo, useFFTData, useVisualSourceDataX } from '../appState'
+import { useAppStateActions, useEnergyInfo, useFFTData } from '../appState'
 import FFTAnalyzer, { EnergyMeasure } from './analyzers/fft'
 
 export interface FFTAnalyzerControlsProps {
