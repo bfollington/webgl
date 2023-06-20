@@ -6,7 +6,7 @@ import {
   getAppModeDisplayName,
   getPlatformSupportedApplicationModes,
 } from './audio-analyzer/applicationModes'
-import AudioFFTAnalyzer from './audio-analyzer/analyzers/audioScopeAnalyzer'
+import AudioFFTAnalyzer from './audio-analyzer/analyzers/audioFFTAnalyzer'
 import AudioScopeAnalyzer from './audio-analyzer/analyzers/audioScopeAnalyzer'
 import AudioScopeCanvas from './audio-analyzer/canvas/AudioScope'
 import Visual3DCanvas from './audio-analyzer/canvas/Visual3D'
