@@ -6,6 +6,7 @@ import { ACESFilmicToneMapping, sRGBEncoding } from 'three'
 import { Scene } from './Scene'
 import './styles/main.css'
 import { WebMidi } from 'webmidi'
+import AudioScene from './components/AudioScene'
 
 WebMidi.enable()
   .then(onEnabled)
@@ -37,15 +38,24 @@ function Main() {
         oneLineLabels={false}
         flat={true}
         theme={{
+          fonts: {
+            mono: '"SF Mono", monospace',
+          },
+          radii: {
+            xs: '0px',
+            sm: '0px',
+            lg: '0px',
+          },
           sizes: {
-            titleBarHeight: '28px',
+            titleBarHeight: '24px',
           },
           fontSizes: {
             root: '10px',
           },
         }}
       />
-      <Canvas
+      <AudioScene />
+      {/* <Canvas
         dpr={[1, 2]}
         gl={{
           antialias: true,
@@ -61,7 +71,7 @@ function Main() {
         shadows
       >
         <Scene />
-      </Canvas>
+      </Canvas> */}
     </div>
   )
 }
