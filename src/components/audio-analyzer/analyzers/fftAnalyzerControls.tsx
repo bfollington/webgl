@@ -1,6 +1,6 @@
 import { folder, useControls } from 'leva'
 import { useEffect, useRef } from 'react'
-import { useAppStateActions, useEnergyInfo, useVisualSourceDataX } from '../appState'
+import { useAppStateActions, useEnergyInfo, useFFTData, useVisualSourceDataX } from '../appState'
 import FFTAnalyzer, { EnergyMeasure } from './analyzers/fft'
 
 export interface FFTAnalyzerControlsProps {
@@ -30,9 +30,9 @@ const FFTAnalyzerControls = ({ analyzer }: FFTAnalyzerControlsProps) => {
       },
     }),
   })
-  const freqData = useVisualSourceDataX()
+  const freqData2 = useFFTData()
   const energyInfo = useEnergyInfo()
-  const { resizeVisualSourceData } = useAppStateActions()
+  const { resizeFFTData } = useAppStateActions()
   const animationRequestRef = useRef<number>(null!)
 
   /**
@@ -41,16 +41,16 @@ const FFTAnalyzerControls = ({ analyzer }: FFTAnalyzerControlsProps) => {
   const animate = (): void => {
     const bars = analyzer.getBars()
 
-    if (freqData.length != bars.length) {
+    if (freqData2.length != bars.length) {
       console.log(`Resizing ${bars.length}`)
-      resizeVisualSourceData(bars.length)
+      resizeFFTData(bars.length)
       return
     }
 
     energyInfo.current = analyzer.getEnergy(energyMeasure as EnergyMeasure)
 
     bars.forEach(({ value }, index) => {
-      freqData[index] = value
+      freqData2[index] = value
     })
     animationRequestRef.current = requestAnimationFrame(animate)
   }
@@ -64,7 +64,7 @@ const FFTAnalyzerControls = ({ analyzer }: FFTAnalyzerControlsProps) => {
     }
     animationRequestRef.current = requestAnimationFrame(animate)
     return () => cancelAnimationFrame(animationRequestRef.current)
-  }, [freqData, energyMeasure])
+  }, [freqData2, energyMeasure])
 
   /**
    * Make sure an analyzer exists with the correct mode

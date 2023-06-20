@@ -3,7 +3,7 @@ import React, { Suspense } from 'react'
 import { CoordinateMapper_Data } from '../mappers/coordinateMappers/data'
 import { EnergyTracker } from '../mappers/valueTracker/energyTracker'
 import { ColorPaletteType, COLOR_PALETTE } from './palettes'
-import { useEnergyInfo, useVisualSourceDataX } from '../appState'
+import { useEnergyInfo, useFFTData } from '../appState'
 
 interface AudioVisualProps {
   visual: string
@@ -11,7 +11,7 @@ interface AudioVisualProps {
 }
 
 const AudioVisual = ({ visual, palette = COLOR_PALETTE.THREE_COOL_TO_WARM }: AudioVisualProps) => {
-  const freqData = useVisualSourceDataX()
+  const freqData = useFFTData()
   const energyInfo = useEnergyInfo()
 
   const { amplitude } = useControls({

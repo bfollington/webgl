@@ -77,7 +77,6 @@ const InternalMicrophoneFFTAnalyzer = ({}: InternalMicrophoneFFTAnalyzerProps) =
         onMicDisabled={onMicDisabled}
         onStreamCreated={onStreamCreated}
       />
-      <div>"test"</div>
       <FFTAnalyzerControls analyzer={analyzer} />
     </>
   )

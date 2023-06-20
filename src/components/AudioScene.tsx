@@ -50,7 +50,8 @@ const AudioScene = () => {
 
   return (
     <Suspense fallback={<span>loading...</span>}>
-      {getAnalyzerComponent(mode as ApplicationMode)}
+      <AudioFFTAnalyzer />
+      <AudioScopeAnalyzer />
       {getCanvasComponent(mode as ApplicationMode)}
     </Suspense>
   )

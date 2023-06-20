@@ -37,13 +37,13 @@ export interface Visual3DCanvasProps {
   mode: ApplicationMode
 }
 const AVAILABLE_VISUALS = [
+  'fullscreenShader',
   'grid',
   'sphere',
   'cube',
   'diffusedRing',
   'pinGrid',
   'dna',
-  'fullscreenShader',
   // "traceParticles",
   // "particleSwarm",
 ]
