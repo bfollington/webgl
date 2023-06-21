@@ -23,7 +23,7 @@ export default function WebcamTexture() {
   const [webcamMaterial, width, height] = useWebcam({ id: camera })
 
   useEffect(() => {
-    if (navigator.mediaDevices.getUserMedia) {
+    if ((navigator.mediaDevices as any).getUserMedia) {
       navigator.mediaDevices.enumerateDevices().then((devices) => {
         setDevices((_) => devices)
       })
