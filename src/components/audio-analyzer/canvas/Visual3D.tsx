@@ -38,6 +38,7 @@ export interface Visual3DCanvasProps {
 }
 const AVAILABLE_VISUALS = [
   'fullscreenShader',
+  'webcam',
   'grid',
   'sphere',
   'cube',

@@ -1,72 +1,129 @@
 import { folder, useControls } from 'leva'
-import { PointLight } from 'three'
+import * as THREE from 'three'
+import { PointLight, ShaderMaterial } from 'three'
 import BaseGrid from '../grid/base'
 import { VisualProps } from '../common'
-import { useFrame } from '@react-three/fiber'
+import { extend, useFrame, useThree } from '@react-three/fiber'
 import { useRef } from 'react'
 import { ScreenQuadScene } from '../../../FullscreenShader'
+import WebcamTexture from '../../../webcam/texture'
+import { Box, shaderMaterial } from '@react-three/drei'
+import { useFFTData, useScopeDataX, useScopeDataY } from '../../appState'
+import React from 'react'
 
-const FullscreenShaderVisual = ({ coordinateMapper }: VisualProps) => {
-  const { nPinGridRows, nPinGridCols, pinGridUnitSideLength } = useControls({
-    'Visual - Grid': folder(
-      {
-        nPinGridRows: {
-          value: 50,
-          min: 2,
-          max: 150,
-          step: 1,
-        },
-        nPinGridCols: {
-          value: 50,
-          min: 2,
-          max: 150,
-          step: 1,
-        },
-        pinGridUnitSideLength: {
-          value: 0.3,
-          min: 0.05,
-          max: 1.0,
-          step: 0.05,
-        },
-      },
-      { collapsed: true }
-    ),
-  })
+const DemoMaterial = shaderMaterial(
+  {
+    time: 0,
+    fftBars: new Float32Array(),
+    scopeX: new Float32Array(),
+    scopeY: new Float32Array(),
+    resolution: new THREE.Vector2(),
+    map: new THREE.Texture(),
+  },
+  `
+  varying vec2 vUv;
+    void main() {
+      vUv = uv;
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    }
+  `,
+  `
+  uniform float time;
+  uniform float fftBars[121];
+  uniform float scopeX[121];
+  uniform float scopeY[121];
+  uniform vec2 resolution;
+  uniform sampler2D map;
 
-  const radius = Math.max(nPinGridCols, nPinGridRows) * 1.1 * pinGridUnitSideLength
-  const lightRef = useRef<PointLight>(null!)
-  useFrame(({ clock }) => {
-    if (lightRef?.current) {
-      const t = clock.getElapsedTime() * 0.1
-      const halfR = radius / 2
-      lightRef.current.position.x = halfR * Math.sin(t * 7)
-      lightRef.current.position.y = halfR * Math.cos(t * 5)
-      lightRef.current.position.z = Math.abs(halfR * Math.cos(t * 3))
+  varying vec2 vUv;
+  
+  void main() {
+    vec2 uv = vUv;
+    float pct = abs(sin(time));
+    float amp = fftBars[int(floor((uv.x) * 64.0))];
+    float sx = scopeX[int(floor((uv.x) * 64.0))];
+    float sy = scopeY[int(floor((uv.y) * 64.0))];
+    vec4 tex = texture2D(map, uv);
+    vec3 color = vec3(sx+sy+tex.x, sx-sy+tex.y, amp+tex.z);
+    vec3 colorA = vec3(amp,0.141,0.912);
+    vec3 colorB = vec3(1.000,amp,0.224);
+    // color = mix(color, tex, pct);
+    gl_FragColor = vec4(color*amp,1.0);
+    // gl_FragColor = tex;
+    #include <tonemapping_fragment>
+    #include <encodings_fragment>
+  }
+  `
+)
+
+extend({ DemoMaterial })
+
+type DemoMaterialImpl = {
+  time: number
+  fftBars: Float32Array
+  scopeX: Float32Array
+  scopeY: Float32Array
+  resolution: number[]
+} & JSX.IntrinsicElements['shaderMaterial']
+
+declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
+  namespace JSX {
+    interface IntrinsicElements {
+      demoMaterial: DemoMaterialImpl
+    }
+  }
+}
+
+export function ShaderScene() {
+  const size = useThree((state) => state.size)
+  const ref = React.useRef<ShaderMaterial>(null)
+  const boxRef = React.useRef<THREE.Mesh | null>(null)
+
+  const bars = useFFTData()
+  const scopeX = useScopeDataX()
+  const scopeY = useScopeDataY()
+
+  useFrame((state) => {
+    if (!ref.current) return
+
+    if (ref.current.uniforms) {
+      ref.current.uniforms.time.value = state.clock.elapsedTime
+      ref.current.uniforms.fftBars.value = bars
+      ref.current.uniforms.scopeX.value = scopeX
+      ref.current.uniforms.scopeY.value = scopeY
+    }
+
+    if (!boxRef.current) {
+      return
+    } else {
+      boxRef.current.scale.x = 1 + bars[0] * 0.5
+      boxRef.current.scale.y = 1 + bars[1] * 0.5
+      boxRef.current.scale.z = 1 + bars[2] * 0.5
     }
   })
 
   return (
+    <Box ref={boxRef}>
+      <demoMaterial
+        key={DemoMaterial.key}
+        ref={ref}
+        time={0}
+        fftBars={bars}
+        scopeX={scopeX}
+        scopeY={scopeY}
+        resolution={[size.width, size.height]}
+      >
+        <WebcamTexture />
+      </demoMaterial>
+    </Box>
+  )
+}
+
+const FullscreenShaderVisual = ({ coordinateMapper }: VisualProps) => {
+  return (
     <>
-      <ScreenQuadScene />
-      {/* <group>
-        <BaseGrid
-          coordinateMapper={coordinateMapper}
-          nGridCols={nPinGridCols}
-          nGridRows={nPinGridRows}
-          cubeSideLength={pinGridUnitSideLength}
-          cubeSpacingScalar={1.1}
-          pinStyle={true}
-          palette={undefined}
-          color={"black"}
-        />
-        <pointLight position={[0, 0, 5 * radius]} intensity={5.0} />
-        <pointLight
-          ref={lightRef}
-          intensity={5}
-          distance={3 * radius}
-          decay={1.0}
-        />
-      </group> */}
+      <ShaderScene />
     </>
   )
 }
