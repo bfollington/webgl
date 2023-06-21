@@ -1,15 +1,11 @@
-import { folder, useControls } from 'leva'
-import * as THREE from 'three'
-import { PointLight, ShaderMaterial } from 'three'
-import BaseGrid from '../grid/base'
-import { VisualProps } from '../common'
-import { extend, useFrame, useThree } from '@react-three/fiber'
-import { useRef } from 'react'
-import { ScreenQuadScene } from '../../../FullscreenShader'
-import WebcamTexture from '../../../webcam/texture'
 import { Box, shaderMaterial } from '@react-three/drei'
-import { useFFTData, useScopeDataX, useScopeDataY } from '../../appState'
+import { extend, useFrame, useThree } from '@react-three/fiber'
 import React from 'react'
+import * as THREE from 'three'
+import { ShaderMaterial } from 'three'
+import WebcamTexture from '../../../webcam/texture'
+import { useFFTData, useScopeDataX, useScopeDataY } from '../../appState'
+import { VisualProps } from '../common'
 
 const DemoMaterial = shaderMaterial(
   {
