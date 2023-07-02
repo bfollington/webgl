@@ -2,7 +2,11 @@ import { useControls } from 'leva'
 import { useEffect, useState } from 'react'
 import { useWebcam } from './useWebcam'
 
-export default function WebcamTexture() {
+type Props = {
+  attach?: String
+}
+
+export default function WebcamTexture({ attach = 'map' }: Props) {
   const [devices, setDevices] = useState<MediaDeviceInfo[]>()
   const [startTime, setStartTime] = useState(0)
 
@@ -41,5 +45,5 @@ export default function WebcamTexture() {
     }
   }, [devices])
 
-  return <videoTexture attach='map' args={[webcamMaterial]} />
+  return <videoTexture attach={attach} args={[webcamMaterial]} />
 }

@@ -12,6 +12,7 @@ import AudioVisual from '../visualizers/visualizerAudio'
 import NoiseVisual from '../visualizers/visualizerNoise'
 import ParticleNoiseVisual from '../visualizers/visualizerParticleNoise'
 import WaveformVisual from '../visualizers/visualizerWaveform'
+import { Bloom, EffectComposer } from '@react-three/postprocessing'
 
 const getVisualizerComponent = (
   mode: ApplicationMode,
@@ -37,6 +38,7 @@ export interface Visual3DCanvasProps {
   mode: ApplicationMode
 }
 const AVAILABLE_VISUALS = [
+  'spectrum-plot',
   'fullscreenShader',
   'webcam',
   'grid',
@@ -86,10 +88,13 @@ const Visual3DCanvas = ({ mode }: Visual3DCanvasProps) => {
     >
       <color attach='background' args={[backgroundColor]} />
       <ambientLight />
-      <fog attach='fog' args={[backgroundColor, 0, 100]} />
+      <fog attach='fog' args={[backgroundColor, 0, 10]} />
       {getVisualizerComponent(mode as ApplicationMode, visualizer, palette)}
       {/* <Stats /> */}
       <OrbitControls makeDefault />
+      <EffectComposer>
+        <Bloom luminanceThreshold={0.4} intensity={0.3}></Bloom>
+      </EffectComposer>
     </Canvas>
   )
 }
