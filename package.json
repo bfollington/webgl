@@ -11,7 +11,7 @@
   "dependencies": {
     "@react-three/drei": "^9.76.1",
     "@react-three/fiber": "^8.13.3",
-    "@react-three/postprocessing": "^2.14.10",
+    "@react-three/postprocessing": "^2.14.13",
     "@types/three": "^0.152.1",
     "@types/webmidi": "^2.0.7",
     "leva": "^0.9.35",
