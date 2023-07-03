@@ -1,9 +1,10 @@
 import { useControls } from 'leva'
 import { useEffect, useState } from 'react'
 import { useWebcam } from './useWebcam'
+import { AttachType } from '@react-three/fiber/dist/declarations/src/core/renderer'
 
 type Props = {
-  attach?: String
+  attach?: AttachType
 }
 
 export default function WebcamTexture({ attach = 'map' }: Props) {
