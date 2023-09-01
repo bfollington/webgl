@@ -40,6 +40,7 @@ export interface Visual3DCanvasProps {
 const AVAILABLE_VISUALS = [
   'spectrum-plot',
   'fullscreenShader',
+  'foldingShader',
   'webcam',
   'grid',
   'sphere',
@@ -88,12 +89,12 @@ const Visual3DCanvas = ({ mode }: Visual3DCanvasProps) => {
     >
       <color attach='background' args={[backgroundColor]} />
       <ambientLight />
-      <fog attach='fog' args={[backgroundColor, 0, 10]} />
+      {/* <fog attach='fog' args={[backgroundColor, 0, 10]} /> */}
       {getVisualizerComponent(mode as ApplicationMode, visualizer, palette)}
       {/* <Stats /> */}
       <OrbitControls makeDefault />
       <EffectComposer>
-        <Bloom luminanceThreshold={0.4} intensity={0.3}></Bloom>
+        <Bloom luminanceThreshold={0.001} intensity={0.8}></Bloom>
       </EffectComposer>
     </Canvas>
   )
