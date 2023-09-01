@@ -1,4 +1,4 @@
-import { Box, shaderMaterial } from '@react-three/drei'
+import { Box, Plane, shaderMaterial } from '@react-three/drei'
 import { extend, useFrame, useThree } from '@react-three/fiber'
 import React from 'react'
 import * as THREE from 'three'
@@ -100,7 +100,7 @@ export function ShaderScene() {
   })
 
   return (
-    <Box ref={boxRef}>
+    <Plane ref={boxRef}>
       <demoMaterial
         key={DemoMaterial.key}
         ref={ref}
@@ -112,7 +112,7 @@ export function ShaderScene() {
       >
         <WebcamTexture />
       </demoMaterial>
-    </Box>
+    </Plane>
   )
 }
 
