@@ -1,4 +1,4 @@
-import { Box, Plane, shaderMaterial } from '@react-three/drei'
+import { Billboard, Box, Plane, ScreenQuad, shaderMaterial } from '@react-three/drei'
 import { extend, useFrame, useThree } from '@react-three/fiber'
 import React from 'react'
 import * as THREE from 'three'
@@ -14,7 +14,6 @@ const FoldingMaterial = shaderMaterial(
     scopeX: new Float32Array(),
     scopeY: new Float32Array(),
     iResolution: new THREE.Vector2(),
-    map: new THREE.Texture(),
   },
   `
   varying vec2 vUv;
@@ -29,7 +28,6 @@ const FoldingMaterial = shaderMaterial(
   uniform float scopeX[121];
   uniform float scopeY[121];
   uniform vec2 iResolution;
-  uniform sampler2D map;
 
   varying vec2 vUv;
 
@@ -39,16 +37,20 @@ const FoldingMaterial = shaderMaterial(
   #define T iTime * .1
 
   float shape(vec2 p){
-    p *= .04 * sin(T);
+    float amp = fftBars[int(floor(p.x - 0.5 + p.y - 0.5) * 0.1)];
+    float sx = scopeX[int(floor((p.x) * .1))];
+    float sy = scopeY[int(floor((p.y) * .1))];
+
+    p *= 0.01 + (0.1 * sin(T));
     
     float i, f, 
           s = .5,
-          t = 2.;
+          t = 2. + .5 * (sx + sy);
           
-    while(i++ < 4.) {
-        t += s * (2.*cos(p.x * 1.) + sin(1. * p.y));
+    while(i++ < 3.) {
+        t += s * (cos(p.x) + sin(p.y));
         p *= rot(T);
-        p += t * 3.;
+        p += t * (3.);
         s *= 0.8;
     }
     return t;
@@ -93,7 +95,8 @@ const FoldingMaterial = shaderMaterial(
     vec3 cw, cu, cv, rd, ba;
     vec3 ro, ta;
 
-    ro = vec3(420., 970., 500.);
+    float vol = fftBars[32];
+    ro = vec3(cos(T) * 255. + 100. * fftBars[8] - 50., 750. - 250. * fftBars[40], sin(T) * 100. +500. + 100. * fftBars[32]);
     ta = vec3(0);
     
     ba = ta - ro;
@@ -110,7 +113,7 @@ const FoldingMaterial = shaderMaterial(
 
     vec3 p;
     float h, i, t, s;
-    while(i++ < 200.) {
+    while(i++ < 150.) {
         p = ro + t * rd;
         s = shape(p.xz);
         h =  p.y - s * 100.;
@@ -119,7 +122,8 @@ const FoldingMaterial = shaderMaterial(
         t += h * .02;
     }
     
-    float d =  1. - exp(-.0000049 * t * t) * 3.;
+    float amp = fftBars[int(floor((p.x - p.y) * 0.1) - 32.)] + 0.25 * sin(T);
+    float d =  1. - exp(-.0000049 * t * t) * (2.);
     //O = vec4(colormap(d), 1.);
     vec3 c = colormap(d);
     O = vec4(c, 1.);
@@ -128,17 +132,9 @@ const FoldingMaterial = shaderMaterial(
 
 
     float pct = abs(sin(iTime));
-    float amp = fftBars[int(floor((uv.x) * 64.0))];
     float sx = scopeX[int(floor((uv.x) * 64.0))];
     float sy = scopeY[int(floor((uv.y) * 64.0))];
-    vec4 tex = texture2D(map, uv);
-    vec3 color = vec3(sx+sy+tex.x, sx-sy+tex.y, amp+tex.z);
-    vec3 colorA = vec3(amp,0.141,0.912);
-    vec3 colorB = vec3(1.000,amp,0.224);
-    // color = mix(color, tex, pct);
-    gl_FragColor = vec4(color*amp,1.0);
     gl_FragColor = O;
-    // gl_FragColor = tex;
     // #include <tonemapping_fragment>
     // #include <encodings_fragment>
   }
@@ -183,17 +179,17 @@ export function ShaderScene() {
       ref.current.uniforms.scopeY.value = scopeY
     }
 
-    if (!boxRef.current) {
-      return
-    } else {
-      boxRef.current.scale.x = 1 + bars[0] * 0.5
-      boxRef.current.scale.y = 1 + bars[1] * 0.5
-      boxRef.current.scale.z = 1 + bars[2] * 0.5
-    }
+    // if (!boxRef.current) {
+    //   return
+    // } else {
+    //   boxRef.current.scale.x = 1 + bars[0] * 0.5
+    //   boxRef.current.scale.y = 1 + bars[1] * 0.5
+    //   boxRef.current.scale.z = 1 + bars[2] * 0.5
+    // }
   })
 
   return (
-    <Plane ref={boxRef}>
+    <ScreenQuad ref={boxRef}>
       <foldingMaterial
         key={FoldingMaterial.key}
         ref={ref}
@@ -202,10 +198,8 @@ export function ShaderScene() {
         scopeX={scopeX}
         scopeY={scopeY}
         iResolution={[size.width, size.height]}
-      >
-        <WebcamTexture />
-      </foldingMaterial>
-    </Plane>
+      ></foldingMaterial>
+    </ScreenQuad>
   )
 }
 
