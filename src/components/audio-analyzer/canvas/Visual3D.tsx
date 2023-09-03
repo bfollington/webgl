@@ -13,6 +13,7 @@ import NoiseVisual from '../visualizers/visualizerNoise'
 import ParticleNoiseVisual from '../visualizers/visualizerParticleNoise'
 import WaveformVisual from '../visualizers/visualizerWaveform'
 import { Bloom, EffectComposer, Noise, Scanline, DepthOfField } from '@react-three/postprocessing'
+import React, { useEffect } from 'react'
 
 const getVisualizerComponent = (
   mode: ApplicationMode,
@@ -52,6 +53,7 @@ const AVAILABLE_VISUALS = [
   // "particleSwarm",
 ]
 const Visual3DCanvas = ({ mode }: Visual3DCanvasProps) => {
+  const canvas = React.useRef<HTMLCanvasElement>(null)
   const visualizerParam = new URLSearchParams(document.location.search).get('visual') as string
   const { visualizer } = useControls({
     visualizer: {
@@ -62,7 +64,7 @@ const Visual3DCanvas = ({ mode }: Visual3DCanvasProps) => {
       options: AVAILABLE_VISUALS,
     },
   })
-  const { palette, colorBackground } = useControls({
+  const { palette, colorBackground, fullscreen } = useControls({
     'Visual - Color': folder(
       {
         palette: {
@@ -73,12 +75,26 @@ const Visual3DCanvas = ({ mode }: Visual3DCanvasProps) => {
       },
       { collapsed: true }
     ),
+    fullscreen: {
+      value: false,
+    },
   })
+
+  useEffect(() => {
+    const main = document.querySelector('.main')
+    if (main && fullscreen) {
+      main.requestFullscreen()
+    } else {
+      document.exitFullscreen()
+    }
+  }, [fullscreen])
+
   const backgroundColor = colorBackground
     ? ColorPalette.getPalette(palette).calcBackgroundColor(0)
     : '#010204'
   return (
     <Canvas
+      ref={canvas}
       camera={{
         fov: 45,
         near: 1,
