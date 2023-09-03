@@ -33,8 +33,11 @@ body {
 
 .status-bar {
   position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 256px;
+  bottom: 8px;
+  left: 8px;
   color: white;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.5);
+  font-family: monospace;
 }

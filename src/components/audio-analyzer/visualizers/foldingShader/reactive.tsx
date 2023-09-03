@@ -171,19 +171,21 @@ export function ShaderScene() {
     if (!ref.current) return
 
     if (ref.current.uniforms) {
-      ref.current.uniforms.iTime.value = (Date.now() % 1000000) / 1000
+      ref.current.uniforms.iTime.value =
+        (Date.now() % 1000000) / 1000.0 +
+        0.2 * Math.sin((bars[8] + bars[16] + bars[24] + bars[32] + bars[48]) * 0.2)
       ref.current.uniforms.fftBars.value = bars
       ref.current.uniforms.scopeX.value = scopeX
       ref.current.uniforms.scopeY.value = scopeY
     }
 
-    // if (!boxRef.current) {
-    //   return
-    // } else {
-    //   boxRef.current.scale.x = 1 + bars[0] * 0.5
-    //   boxRef.current.scale.y = 1 + bars[1] * 0.5
-    //   boxRef.current.scale.z = 1 + bars[2] * 0.5
-    // }
+    if (!boxRef.current) {
+      return
+    } else {
+      boxRef.current.scale.x = 1 + bars[0] * 0.5
+      boxRef.current.scale.y = 1 + bars[1] * 0.5
+      boxRef.current.scale.z = 1 + bars[2] * 0.5
+    }
   })
 
   return (

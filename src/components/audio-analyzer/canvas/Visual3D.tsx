@@ -44,6 +44,7 @@ const AVAILABLE_VISUALS = [
   'spectrum-plot',
   'fullscreenShader',
   'foldingShader',
+  'spiralsShader',
   'webcam',
   'grid',
   'sphere',
@@ -97,6 +98,7 @@ const Visual3DCanvas = ({ mode }: Visual3DCanvasProps) => {
   return (
     <Canvas
       ref={canvas}
+      dpr={1}
       camera={{
         fov: 45,
         near: 1,
