@@ -7,6 +7,8 @@ import { Scene } from './Scene'
 import './styles/main.css'
 import { WebMidi } from 'webmidi'
 import AudioScene from './components/AudioScene'
+import { RoomProvider, useOthers } from './liveblocks.config'
+import { ClientSideSuspense } from '@liveblocks/react'
 
 WebMidi.enable()
   .then(onEnabled)
@@ -31,6 +33,8 @@ function onEnabled() {
 }
 
 function Main() {
+  const others = useOthers()
+  const userCount = others.length
   return (
     <div className='main'>
       <Leva
@@ -72,12 +76,17 @@ function Main() {
       >
         <Scene />
       </Canvas> */}
+      <div className='status-bar'>
+        <div>There are {userCount} other user(s) online</div>
+      </div>
     </div>
   )
 }
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <Main />
+    <RoomProvider id='my-room' initialPresence={{ cursor: { x: 0, y: 0 } }}>
+      <ClientSideSuspense fallback={<div>Loading…</div>}>{() => <Main />}</ClientSideSuspense>
+    </RoomProvider>
   </React.StrictMode>
 )

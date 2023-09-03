@@ -14,6 +14,8 @@ import ParticleNoiseVisual from '../visualizers/visualizerParticleNoise'
 import WaveformVisual from '../visualizers/visualizerWaveform'
 import { Bloom, EffectComposer, Noise, Scanline, DepthOfField } from '@react-three/postprocessing'
 import React, { useEffect } from 'react'
+import { RoomProvider } from '../../../liveblocks.config'
+import { ClientSideSuspense } from '@liveblocks/react'
 
 const getVisualizerComponent = (
   mode: ApplicationMode,
@@ -85,7 +87,7 @@ const Visual3DCanvas = ({ mode }: Visual3DCanvasProps) => {
     if (main && fullscreen) {
       main.requestFullscreen()
     } else {
-      document.exitFullscreen()
+      document.fullscreenElement && document?.exitFullscreen()
     }
   }, [fullscreen])
 

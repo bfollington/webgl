@@ -1,6 +1,6 @@
 import { Billboard, Box, Plane, ScreenQuad, shaderMaterial } from '@react-three/drei'
 import { extend, useFrame, useThree } from '@react-three/fiber'
-import React from 'react'
+import React, { useMemo } from 'react'
 import * as THREE from 'three'
 import { ShaderMaterial } from 'three'
 import WebcamTexture from '../../../webcam/texture'
@@ -165,12 +165,13 @@ export function ShaderScene() {
   const bars = useFFTData()
   const scopeX = useScopeDataX()
   const scopeY = useScopeDataY()
+  const date = useMemo(() => Date.now(), [])
 
   useFrame((state) => {
     if (!ref.current) return
 
     if (ref.current.uniforms) {
-      ref.current.uniforms.iTime.value = state.clock.elapsedTime
+      ref.current.uniforms.iTime.value = (Date.now() % 1000000) / 1000
       ref.current.uniforms.fftBars.value = bars
       ref.current.uniforms.scopeX.value = scopeX
       ref.current.uniforms.scopeY.value = scopeY
