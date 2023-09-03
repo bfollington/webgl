@@ -20,6 +20,7 @@ const FoldingMaterial = shaderMaterial(
     void main() {
       vUv = uv;
       gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+      gl_Position = vec4(position, 1.0);
     }
   `,
   `
@@ -37,7 +38,6 @@ const FoldingMaterial = shaderMaterial(
   #define T iTime * .1
 
   float shape(vec2 p){
-    float amp = fftBars[int(floor(p.x - 0.5 + p.y - 0.5) * 0.1)];
     float sx = scopeX[int(floor((p.x) * .1))];
     float sy = scopeY[int(floor((p.y) * .1))];
 
@@ -45,7 +45,7 @@ const FoldingMaterial = shaderMaterial(
     
     float i, f, 
           s = .5,
-          t = 2. + .5 * (sx + sy);
+          t = 2.;
           
     while(i++ < 3.) {
         t += s * (cos(p.x) + sin(p.y));
@@ -86,8 +86,8 @@ const FoldingMaterial = shaderMaterial(
   }
 
   void main() {
-    // vec2 uv = vUv;
-    vec2 u = gl_FragCoord.xy;
+    // vec2 u = vUv * 512.;
+    vec2 u = gl_FragCoord.xy * .5;
     vec4 O = gl_FragColor;
 
     vec2 uv = vec2(3, 2) * (u - .5 * res) / res.y;
@@ -96,7 +96,7 @@ const FoldingMaterial = shaderMaterial(
     vec3 ro, ta;
 
     float vol = fftBars[32];
-    ro = vec3(cos(T) * 255. + 100. * fftBars[8] - 50., 750. - 250. * fftBars[40], sin(T) * 100. +500. + 100. * fftBars[32]);
+    ro = vec3(cos(T) * 255., 750., sin(T) * 100. +500.);
     ta = vec3(0);
     
     ba = ta - ro;
@@ -124,16 +124,13 @@ const FoldingMaterial = shaderMaterial(
     
     float amp = fftBars[int(floor((p.x - p.y) * 0.1) - 32.)] + 0.25 * sin(T);
     float d =  1. - exp(-.0000049 * t * t) * (2.);
-    //O = vec4(colormap(d), 1.);
+    // O = vec4(colormap(d), 1.);
     vec3 c = colormap(d);
     O = vec4(c, 1.);
-    O = 1. -vec4(pow(O.xyz,vec3(1./2.2)),1.0);
+    O = vec4(vec3(1.) - pow(O.xyz,vec3(1./2.2)),1.0);
 
 
 
-    float pct = abs(sin(iTime));
-    float sx = scopeX[int(floor((uv.x) * 64.0))];
-    float sy = scopeY[int(floor((uv.y) * 64.0))];
     gl_FragColor = O;
     // #include <tonemapping_fragment>
     // #include <encodings_fragment>

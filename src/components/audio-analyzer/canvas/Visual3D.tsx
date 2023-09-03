@@ -1,4 +1,4 @@
-import { OrbitControls } from '@react-three/drei'
+import { OrbitControls, Stats } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 import { folder, useControls } from 'leva'
 import { ApplicationMode, APPLICATION_MODE } from '../applicationModes'
@@ -12,7 +12,7 @@ import AudioVisual from '../visualizers/visualizerAudio'
 import NoiseVisual from '../visualizers/visualizerNoise'
 import ParticleNoiseVisual from '../visualizers/visualizerParticleNoise'
 import WaveformVisual from '../visualizers/visualizerWaveform'
-import { Bloom, EffectComposer } from '@react-three/postprocessing'
+import { Bloom, EffectComposer, Noise, Scanline, DepthOfField } from '@react-three/postprocessing'
 
 const getVisualizerComponent = (
   mode: ApplicationMode,
@@ -93,9 +93,6 @@ const Visual3DCanvas = ({ mode }: Visual3DCanvasProps) => {
       {getVisualizerComponent(mode as ApplicationMode, visualizer, palette)}
       {/* <Stats /> */}
       <OrbitControls makeDefault />
-      {/* <EffectComposer>
-        <Bloom luminanceThreshold={0.001} intensity={0.8}></Bloom>
-      </EffectComposer> */}
     </Canvas>
   )
 }
