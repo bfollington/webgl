@@ -50,6 +50,7 @@ const AVAILABLE_VISUALS = [
   'formWithoutForm',
   'lightPool',
   'cuttingWords',
+  'conduit',
   'webcam',
   'grid',
   'sphere',
