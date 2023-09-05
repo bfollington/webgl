@@ -47,6 +47,7 @@ const AVAILABLE_VISUALS = [
   'spiralsShader',
   'alienWater',
   'intoTheDrink',
+  'formWithoutForm',
   'webcam',
   'grid',
   'sphere',
