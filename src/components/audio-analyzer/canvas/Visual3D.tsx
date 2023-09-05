@@ -48,6 +48,7 @@ const AVAILABLE_VISUALS = [
   'alienWater',
   'intoTheDrink',
   'formWithoutForm',
+  'lightPool',
   'webcam',
   'grid',
   'sphere',
