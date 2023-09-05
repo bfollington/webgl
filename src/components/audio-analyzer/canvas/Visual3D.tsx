@@ -54,6 +54,7 @@ const AVAILABLE_VISUALS = [
   'twoDirections',
   'shimmering',
   'softWhisper',
+  'entityContact',
   'webcam',
   'grid',
   'sphere',
