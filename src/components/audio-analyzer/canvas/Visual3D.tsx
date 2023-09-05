@@ -51,6 +51,7 @@ const AVAILABLE_VISUALS = [
   'lightPool',
   'cuttingWords',
   'conduit',
+  'twoDirections',
   'webcam',
   'grid',
   'sphere',
