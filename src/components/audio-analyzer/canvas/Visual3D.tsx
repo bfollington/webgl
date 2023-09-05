@@ -49,6 +49,7 @@ const AVAILABLE_VISUALS = [
   'intoTheDrink',
   'formWithoutForm',
   'lightPool',
+  'cuttingWords',
   'webcam',
   'grid',
   'sphere',
