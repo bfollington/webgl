@@ -53,6 +53,7 @@ const AVAILABLE_VISUALS = [
   'conduit',
   'twoDirections',
   'shimmering',
+  'softWhisper',
   'webcam',
   'grid',
   'sphere',
