@@ -52,6 +52,7 @@ const AVAILABLE_VISUALS = [
   'cuttingWords',
   'conduit',
   'twoDirections',
+  'shimmering',
   'webcam',
   'grid',
   'sphere',
