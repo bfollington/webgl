@@ -42,6 +42,7 @@ export interface Visual3DCanvasProps {
 }
 const AVAILABLE_VISUALS = [
   'spectrum-plot',
+  'chainz',
   'fullscreenShader',
   'foldingShader',
   'spiralsShader',
