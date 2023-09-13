@@ -215,14 +215,13 @@ vec2 path(float z) {
           vec3 shad = vec3(shadow(p));
           
           vec3 q = vec3(1.);
-          col = pal(shad.y, q, q, q, 0.35 * vec3(0.,0.33,0.66)) / 1.5;
+          col = pal(shad.y, q, q, q, 0.35 * vec3(0.,0.33,0.66)) / 2.;
 
-          float fresnel = 2.7 * pow(clamp(1. - dot(normal(p), -rd), 0., 1.), 5.);
+          float fresnel = 5. * pow(clamp(1. - dot(normal(p), -rd), 0., 1.), 5.);
           vec3 rimColor = vec3(.5, .5, 1.);
 
+          col *= abs(getColor(shad.y * 3.));
           col += fresnel * rimColor;
-
-          col += abs(getColor(shad.y * 3.)) / 1.5;
       
           col = 1.1 * shad * shad * col + 0.1 * col;
           col = pow(col * .9, vec3(3, 2.5, 2.2) * .2);

@@ -83,6 +83,7 @@ float map(vec2 p) {
 }
 
 vec3 bg(vec2 coord) {
+  return vec3(0.);
     vec2 uv = (coord.xy * 4.0 - iResolution.xy) / min(iResolution.x, iResolution.y);
     vec3 col = vec3(0.0); 
     float time = iTime * 0.1;

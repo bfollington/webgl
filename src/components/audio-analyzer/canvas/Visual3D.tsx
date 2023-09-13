@@ -128,6 +128,9 @@ const Visual3DCanvas = ({ mode }: Visual3DCanvasProps) => {
       {getVisualizerComponent(mode as ApplicationMode, visualizer, palette)}
       {/* <Stats /> */}
       <OrbitControls makeDefault />
+      <EffectComposer>
+        <Bloom luminanceThreshold={0.9} luminanceSmoothing={0.4} height={400} />
+      </EffectComposer>
     </Canvas>
   )
 }
