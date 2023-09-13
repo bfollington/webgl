@@ -1,9 +1,8 @@
-import { Billboard, Box, Plane, ScreenQuad, shaderMaterial } from '@react-three/drei'
+import { ScreenQuad, shaderMaterial } from '@react-three/drei'
 import { extend, useFrame, useThree } from '@react-three/fiber'
 import React, { useMemo } from 'react'
 import * as THREE from 'three'
 import { ShaderMaterial } from 'three'
-import WebcamTexture from '../../../webcam/texture'
 import { useFFTData, useScopeDataX, useScopeDataY } from '../../appState'
 import { VisualProps } from '../common'
 
@@ -42,7 +41,7 @@ const ChainzMaterial = shaderMaterial(
   #define wmod(s, w) mod(s ,w) - w/2.
   
   #define PI 3.1415
-  #define T  iTime * 1.
+  #define T  iTime * .1
   #define torus(p) length(vec2(length(p.xz) - .3, p.y)) - .08
   
   /*    relateds
@@ -56,7 +55,7 @@ const ChainzMaterial = shaderMaterial(
   */ 
   
   
-  vec2 path(float z) {
+vec2 path(float z) {
       return 1. * vec2(
           sin(cos(z * .3)), 
           cos(z * .5) 
@@ -172,7 +171,16 @@ const ChainzMaterial = shaderMaterial(
       return a + b*cos( 6.28318*(c*t+d) );
   }
   
+  vec3 getColor(float amount) {
+    vec3 color = 0.5 + 0.5 * cos(6.2831 * (vec3(0.0, 0.1, 0.2) + amount * vec3(1.0, 1.0, 1.0)));
+    return color * amount;
+  }
   
+  // Bluey purple
+  // vec3 getColor(float amount) {
+  //   vec3 color = vec3(0.3, 0.5, 0.9) +vec3(0.9, 0.4, 0.2) * cos(6.2831 * (vec3(0.30, 0.20, 0.20) + amount * vec3(1.0)));
+  //   return color * amount;
+  // }
   
   void main(){
       vec4 O = gl_FragColor;
@@ -207,7 +215,14 @@ const ChainzMaterial = shaderMaterial(
           vec3 shad = vec3(shadow(p));
           
           vec3 q = vec3(1.);
-          col = pal(shad.y, q, q, q, 0.35 * vec3(0.,0.33,0.66));
+          col = pal(shad.y, q, q, q, 0.35 * vec3(0.,0.33,0.66)) / 1.5;
+
+          float fresnel = 2.7 * pow(clamp(1. - dot(normal(p), -rd), 0., 1.), 5.);
+          vec3 rimColor = vec3(.5, .5, 1.);
+
+          col += fresnel * rimColor;
+
+          col += abs(getColor(shad.y * 3.)) / 1.5;
       
           col = 1.1 * shad * shad * col + 0.1 * col;
           col = pow(col * .9, vec3(3, 2.5, 2.2) * .2);

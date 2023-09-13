@@ -7,7 +7,7 @@ import WebcamTexture from '../../../webcam/texture'
 import { useFFTData, useScopeDataX, useScopeDataY } from '../../appState'
 import { VisualProps } from '../common'
 
-const FormWithoutFormMaterial = shaderMaterial(
+const MuntedRingMaterial = shaderMaterial(
   {
     iTime: 0,
     fftBars: new Float32Array(),
@@ -86,16 +86,16 @@ vec4 dither4x4(in vec2 position, in vec4 color) {
 float sdBola(vec3 p) {
 
     float r = .5*length(p.xy);
-    float a = mod(atan(p.y, p.x) + cos(TIME) * 1., _2PI) - _2PI / 2.;
-    float b = 5.*cos(TIME) * atan(p.y, p.x);
+    float a = mod(sin(p.y + p.x / TIME) + cos(p.x) * 1., _2PI) - _2PI / 2.;
+    float b = 5.*cos(TIME);
     
     p.xy = r * vec2(cos(a), sin(a));
     p.x -= 1.;
 
-    p.xz = cos(b) * p.xz + sin(TIME/1.3 + b) * vec2(-p.z, p.x);
-    p.x = abs(p.x) - .8*abs(0.1 + sin(TIME + 3.*r)); 
+    p.xz = 2. * abs(cos(TIME * 2.3)) * p.xz + abs(sin(TIME*2.3)) * vec2(-p.z, p.x);
+    //p.x = abs(p.x) - .8*abs(2. + sin(TIME + 3.*r)); 
 
-    return length(p)*(0.2+abs(cos(TIME/10.)+sin(TIME/4.12))) - .3*abs(sin(5.*r + TIME/1.5));
+    return length(p) * .3 - .3*abs(sin(5.*r + 32.));
 }
 
 
@@ -107,7 +107,7 @@ vec2 rot(vec2 p, float ang){
 
 
 float map(vec3 p) {
-    vec3 bola = vec3(0, 1, 5);
+    vec3 bola = vec3(0, 1, 10.);
     return min(2., sdBola(p - bola));
 }
 
@@ -211,9 +211,9 @@ void main(){
   `
 )
 
-extend({ FormWithoutFormMaterial })
+extend({ MuntedRingMaterial })
 
-type FormWithoutFormMaterialImpl = {
+type MuntedRingMaterialImpl = {
   iTime: number
   fftBars: Float32Array
   scopeX: Float32Array
@@ -225,7 +225,7 @@ declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace JSX {
     interface IntrinsicElements {
-      formWithoutFormMaterial: FormWithoutFormMaterialImpl
+      muntedRingMaterial: MuntedRingMaterialImpl
     }
   }
 }
@@ -253,15 +253,15 @@ export function ShaderScene() {
 
   return (
     <ScreenQuad ref={boxRef}>
-      <formWithoutFormMaterial
-        key={FormWithoutFormMaterial.key}
+      <muntedRingMaterial
+        key={MuntedRingMaterial.key}
         ref={ref}
         iTime={0}
         fftBars={bars}
         scopeX={scopeX}
         scopeY={scopeY}
         iResolution={[size.width, size.height]}
-      ></formWithoutFormMaterial>
+      ></muntedRingMaterial>
     </ScreenQuad>
   )
 }
