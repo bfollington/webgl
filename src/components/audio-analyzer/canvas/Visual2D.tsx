@@ -1,13 +1,11 @@
-import { Bloom, EffectComposer } from '@react-three/postprocessing'
+import { AnimatedSprite, Container, Sprite, Stage, useApp, useTick } from '@pixi/react'
 import { folder, useControls } from 'leva'
-import React, { useEffect, useMemo, useRef } from 'react'
-import { AVAILABLE_COLOR_PALETTES, COLOR_PALETTE, ColorPalette } from '../visualizers/palettes'
-import AudioVisual from '../visualizers/visualizerAudio'
-import { AnimatedSprite, Container, Sprite, Stage, Text, useApp, useTick } from '@pixi/react'
-import { BlurFilter, Spritesheet } from 'pixi.js'
 import * as PIXI from 'pixi.js'
-import { Loader } from '@pixi/loaders'
-import { useRedo } from '../../../liveblocks.config'
+import { BlurFilter } from 'pixi.js'
+import React, { useEffect, useMemo, useRef } from 'react'
+import tiles from '../../../assets/tiles.png'
+import { AVAILABLE_COLOR_PALETTES, COLOR_PALETTE, ColorPalette } from '../visualizers/palettes'
+import { Assets } from '@pixi/assets'
 
 export interface Visual2DCanvasProps {}
 
@@ -72,6 +70,40 @@ function makeGrid(x: number, y: number) {
   })
 }
 
+function useTexture(src: string) {
+  const [texture, setTexture] = React.useState<PIXI.BaseTexture>(new PIXI.BaseTexture())
+
+  useEffect(() => {
+    Assets.load(src).then(setTexture)
+  }, [src])
+
+  return texture
+}
+
+function useTileset(
+  texture: PIXI.BaseTexture,
+  rows: number,
+  columns: number,
+  width: number,
+  height: number
+) {
+  const [textures, setTextures] = React.useState<PIXI.Texture[]>([])
+
+  useEffect(() => {
+    const textures = []
+    for (let i = 0; i < rows; i++) {
+      for (let j = 0; j < columns; j++) {
+        textures.push(
+          new PIXI.Texture(texture, new PIXI.Rectangle(j * width, i * height, width, height))
+        )
+      }
+    }
+    setTextures(textures)
+  }, [texture, rows, columns, width, height])
+
+  return textures
+}
+
 const AVAILABLE_VISUALS = ['test']
 const Visual3DCanvas = ({}: Visual2DCanvasProps) => {
   const canvas = React.useRef<HTMLCanvasElement>(null)
@@ -117,7 +149,9 @@ const Visual3DCanvas = ({}: Visual2DCanvasProps) => {
   const blurFilter = useMemo(() => new BlurFilter(4), [])
   const textures = useMemo(() => makeAnimatedSpriteTextures(), [])
 
-  const grid = makeGrid(10, 10)
+  const grid = makeGrid(28, 28)
+  const tex = useTexture(tiles)
+  const frames = useTileset(tex, 8, 8, 8, 8)
 
   return (
     <div className='pixi'>
@@ -130,13 +164,15 @@ const Visual3DCanvas = ({}: Visual2DCanvasProps) => {
           resolution: 1,
         }}
       >
-        <Container x={8} y={8}>
-          {grid.map((row, i) => {
-            return row.map((col, j) => {
-              return <Agent x={i} y={j} textures={textures} />
-            })
-          })}
-        </Container>
+        {frames != null && (
+          <Container x={16} y={16}>
+            {grid.map((row, i) => {
+              return row.map((col, j) => {
+                return <Agent x={i} y={j} textures={frames} />
+              })
+            })}
+          </Container>
+        )}
       </Stage>
     </div>
   )
@@ -147,19 +183,23 @@ function Agent({ x, y, textures }: { x: number; y: number; textures: PIXI.Textur
   useTick((delta) => {
     if (!spr.current) return
     spr.current.currentFrame =
-      Math.round(Math.abs(10 * Math.sin(Date.now() / 10000 + x + Math.cos(y)))) % 10
+      Math.round(
+        Math.abs(
+          Math.cos((x / 20) * y) * 2 + 24 * Math.sin(Date.now() / 10000 + x / 10 + Math.cos(y / 20))
+        )
+      ) % 24
   })
 
   return (
     <AnimatedSprite
       ref={spr}
       key={`${x}-${y}`}
-      x={x * 32}
-      y={y * 32}
+      x={x * 8}
+      y={y * 8}
       anchor={0}
       textures={textures}
       isPlaying={true}
-      initialFrame={Math.round(Math.abs(10 * Math.sin(Date.now() + x + y))) % 10}
+      initialFrame={Math.round(Math.abs(24 * Math.sin(Date.now() + x + y))) % 24}
       animationSpeed={0}
     />
   )
