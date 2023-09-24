@@ -17,29 +17,8 @@ import React, { useEffect } from 'react'
 import { RoomProvider } from '../../../liveblocks.config'
 import { ClientSideSuspense } from '@liveblocks/react'
 
-const getVisualizerComponent = (
-  mode: ApplicationMode,
-  visual: string,
-  palette: ColorPaletteType
-) => {
-  switch (mode) {
-    case APPLICATION_MODE.WAVE_FORM:
-      return <WaveformVisual visual={visual} palette={palette} />
-    case APPLICATION_MODE.NOISE:
-      return visual === 'particleSwarm' ? (
-        <ParticleNoiseVisual />
-      ) : (
-        <NoiseVisual visual={visual} palette={palette} />
-      )
-    case APPLICATION_MODE.AUDIO:
-      return <AudioVisual visual={visual} palette={palette} />
-    default:
-      throw new Error(`Unknown mode ${mode}`)
-  }
-}
-export interface Visual3DCanvasProps {
-  mode: ApplicationMode
-}
+export interface Visual3DCanvasProps {}
+
 const AVAILABLE_VISUALS = [
   'spectrum-plot',
   'chainz',
@@ -70,7 +49,7 @@ const AVAILABLE_VISUALS = [
   // "traceParticles",
   // "particleSwarm",
 ]
-const Visual3DCanvas = ({ mode }: Visual3DCanvasProps) => {
+const Visual3DCanvas = ({}: Visual3DCanvasProps) => {
   const canvas = React.useRef<HTMLCanvasElement>(null)
   const visualizerParam = new URLSearchParams(document.location.search).get('visual') as string
   const { visualizer } = useControls({
@@ -125,7 +104,7 @@ const Visual3DCanvas = ({ mode }: Visual3DCanvasProps) => {
       <color attach='background' args={[backgroundColor]} />
       <ambientLight />
       {/* <fog attach='fog' args={[backgroundColor, 0, 10]} /> */}
-      {getVisualizerComponent(mode as ApplicationMode, visualizer, palette)}
+      <AudioVisual visual={visualizer} palette={palette} />
       {/* <Stats /> */}
       <OrbitControls makeDefault />
       <EffectComposer>

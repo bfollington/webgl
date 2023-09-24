@@ -10,26 +10,17 @@ import AudioFFTAnalyzer from './audio-analyzer/analyzers/audioFFTAnalyzer'
 import AudioScopeAnalyzer from './audio-analyzer/analyzers/audioScopeAnalyzer'
 import AudioScopeCanvas from './audio-analyzer/canvas/AudioScope'
 import Visual3DCanvas from './audio-analyzer/canvas/Visual3D'
-
-const getAnalyzerComponent = (mode: ApplicationMode) => {
-  switch (mode) {
-    case APPLICATION_MODE.AUDIO:
-      return <AudioFFTAnalyzer />
-    case APPLICATION_MODE.AUDIO_SCOPE:
-      return <AudioScopeAnalyzer />
-    default:
-      return null
-  }
-}
+import Visual2DCanvas from './audio-analyzer/canvas/Visual2D'
 
 const AVAILABLE_MODES = getPlatformSupportedApplicationModes()
 
 const getCanvasComponent = (mode: ApplicationMode) => {
   switch (mode) {
-    case APPLICATION_MODE.AUDIO_SCOPE:
-      return <AudioScopeCanvas />
+    case APPLICATION_MODE.PIXI:
+      return <Visual2DCanvas />
+    case APPLICATION_MODE.R3F:
     default:
-      return <Visual3DCanvas mode={mode} />
+      return <Visual3DCanvas />
   }
 }
 

@@ -41,3 +41,15 @@ body {
   background-color: rgba(0, 0, 0, 0.5);
   font-family: monospace;
 }
+
+.pixi {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+.pixi canvas {
+  /* height: 100%; */
+  image-rendering: pixelated;
+  transform: scale(2);
+}
