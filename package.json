@@ -11,6 +11,7 @@
   "dependencies": {
     "@liveblocks/client": "^1.2.4",
     "@liveblocks/react": "^1.2.4",
+    "@pixi/loaders": "^6.5.10",
     "@pixi/react": "^7.1.1",
     "@react-three/drei": "^9.76.1",
     "@react-three/fiber": "^8.13.3",
