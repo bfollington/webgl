@@ -21,6 +21,7 @@ export interface Visual3DCanvasProps {}
 
 const AVAILABLE_VISUALS = [
   'spectrum-plot',
+  'halfEmpty',
   'chainz',
   'muntedRing',
   'fullscreenShader',
